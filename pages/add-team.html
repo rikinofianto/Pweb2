@@ -1,0 +1,130 @@
+<template>
+<div class="page" data-name="add-team">
+  <div class="navbar">
+    <div class="navbar-inner sliding">
+      <div class="left">
+        <a href="/team/" class="link back" data-force="true" data-ignore-cache="true">
+          <i class="icon icon-back"></i>
+        </a>
+      </div>
+      <div class="title">Add Team</div>
+    </div>
+  </div>
+  <div class="page-content">
+    <form id="addTeamForm" enctype="multipart/form-data">
+      <div class="list no-hairlines-md">
+        <ul>
+          <li>
+            <a class="item-link smart-select smart-select-init" data-open-in="popup"  data-searchbar="true" data-searchbar-placeholder="Search league">
+            <select name="league_id" required validate>
+              <option value="0">-Select league-</option>
+              {{#each leagues}}
+                <option value="{{id}}">{{name}}</option>
+              {{/each}}
+            </select>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title">League</div>
+              </div>
+            </div>
+          </a>
+          </li>
+          <li>
+            <div class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-floating-label">Name</div>
+                <div class="item-input-wrap">
+                  <input type="text" name="name" placeholder="Team name" required validate/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-floating-label">City</div>
+                <div class="item-input-wrap">
+                  <input type="text" name="city" placeholder="City" required validate/>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="block-title">Upload Logo</div>
+      <div class="list">
+        <ul>
+          <li>
+            <div class="item-content item-input">
+              <div class="item-inner">
+                <input type="file" name="logo" id="teamLogo" placeholder="Logo" required validate/>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </form>
+    <div class="block block-strong">
+      <p class="row">
+        <a href="#" class="col button button-fill button-raised color-green" @click="addTeam()">Save</a>
+      </p>
+
+    </div>
+  </div>
+</div>
+</template>
+<script>
+  var img_logo = '';
+  return {
+    data: function () {
+
+    },
+    methods: {
+      addTeam: function() {
+        var app = this.$app;
+        var data = app.form.convertToData('#addTeamForm');
+        var file = document.querySelector('#teamLogo').files[0];
+
+        if (file && data.league_id != '0' && data.name && data.city) {
+          var reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = function () {
+            data = Object.assign(data, {logo: reader.result});
+            app.request({
+              url: 'service/route.php?action=add-team',
+              method: 'POST',
+              data: data,
+              dataType: false,
+              success: function (respond) {
+                var res = JSON.parse(respond);
+                $$('#addTeamForm')[0].reset();
+                if (res.message == 'OK') {
+                  app.dialog.alert("Data saved");
+                }
+              },
+              error: function (error) {
+                // console.log(error);
+              }
+            });
+          }
+        } else {
+          app.dialog.alert("please complete the data!");
+        }
+        
+      },
+
+      getImageData(file) {
+        var datanya = {};
+        
+      },
+    },
+    on: {
+      pageInit: function () {
+
+      },
+      pageAfterOut: function () {
+        // page has left the view
+      },
+    }
+  }
+</script>

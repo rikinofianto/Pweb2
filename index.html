@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: gap: content:">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#2196f3">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <title>Bola</title>
+
+    <link rel="stylesheet" href="css/framework7.min.css">
+    <link rel="stylesheet" href="css/icons.css">
+    <link rel="stylesheet" href="css/app.css">
+  </head>
+  <body>
+    <div id="app">
+      <!-- Status bar overlay for fullscreen mode-->
+      <div class="statusbar"></div>
+      <!-- Views/Tabs container -->
+      <div class="views tabs safe-areas">
+        <!-- Tabbar for switching views-tabs -->
+        <div class="toolbar tabbar-labels toolbar-bottom">
+          <div class="toolbar-inner">
+            <a href="#view-league" class="tab-link tab-link-active">
+              <i class="icon f7-icons ios-only">world</i>
+              <i class="icon f7-icons ios-only icon-ios-fill">world_fill</i>
+              <i class="icon material-icons md-only">public</i>
+              <span class="tabbar-label">League</span>
+            </a>
+            <a href="#view-team" class="tab-link">
+              <i class="icon f7-icons ios-only">star</i>
+              <i class="icon f7-icons ios-only icon-ios-fill">star_fill</i>
+              <i class="icon material-icons md-only">star</i>
+              <span class="tabbar-label">Team</span>
+            </a>
+            <a href="#view-player" class="tab-link">
+              <i class="icon f7-icons ios-only">persons_round</i>
+              <i class="icon f7-icons ios-only icon-ios-fill">persons_round_fill</i>
+              <i class="icon material-icons md-only">people</i>
+              <span class="tabbar-label">Player</span>
+            </a>
+          </div>
+        </div>
+        <!-- Your main view/tab, should have "view-main" class. It also has "tab-active" class -->
+        <div id="view-league" class="view view-main tab tab-active">
+          <!-- Page, data-name contains page name which can be used in page callbacks -->
+          <template>
+            <div class="page" data-name="home">
+              <!-- Top Navbar -->
+              <div class="navbar">
+                <div class="navbar-inner">
+                  <div class="title sliding">League</div>
+                  <div class="right">
+                    <a href="/add-league/" class="link icon-only">
+                      <i class="icon f7-icons ios-only">add</i>
+                      <i class="icon material-icons md-only">add</i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Scrollable page content-->
+              <div class="page-content">
+                {{#js_if "this.leagues != 'Data not found'"}}
+                <div class="list media-list">
+                  <ul>
+                    {{#each leagues}}
+                    <li class="swipeout">
+                      <a href="/league-detail/{{id}}" class="item-link item-content swipeout-content">
+                        <div class="item-media"><img src="{{logo}}" width="80"/></div>
+                        <div class="item-inner">
+                          <div class="item-title-row">
+                            <div class="item-title">{{name}}</div>
+                          </div>
+                          <div class="item-subtitle">{{country}}</div>
+                        </div>
+                      </a>
+                      <div class="swipeout-actions-right">
+                        <a href="#" class="open-more-actions">Edit</a>
+                        <a href="#" data-confirm="Are you sure you want to delete this item?" class="swipeout-delete">Delete</a>
+                      </div>
+                    </li>
+                    {{/each}}
+                  </ul>
+                </div>
+                {{else}}
+                <div class="block block-strong">
+                  <p>Sorry</p>
+                  <p>{{leagues}}.</p>
+                </div>
+                {{/js_if}}
+              </div>
+            </div>
+          </template>
+        </div>
+
+        <!-- Catalog View -->
+        <div id="view-team" class="view tab">
+          <!-- Catalog page will be loaded here dynamically from /catalog/ route -->
+        </div>
+
+        <!-- Settings View -->
+        <div id="view-player" class="view tab">
+          <!-- Settings page will be loaded here dynamically from /settings/ route -->
+        </div>
+      </div>
+
+      <!-- Popup -->
+      <div class="popup" id="add-league">
+        <div class="view">
+          <div class="page">
+            <div class="navbar">
+              <div class="navbar-inner">
+                <div class="title">Add League</div>
+                <div class="right">
+                  <a href="#" class="link popup-close">Close</a>
+                </div>
+              </div>
+            </div>
+            <div class="page-content">
+              <div class="block">
+                <p>Popup content goes here.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Framework7 library -->
+    <script src="js/framework7.min.js"></script>
+
+    <!-- App routes -->
+    <script src="js/routes.js"></script>
+
+    <!-- Your custom app scripts -->
+    <script src="js/app.js"></script>
+  </body>
+</html>
